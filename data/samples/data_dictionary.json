@@ -1,0 +1,16 @@
+{
+  "application_id": "Unique loan application identifier.",
+  "annual_income": "Annual income in INR (log-normal, 4L-30L).",
+  "cibil_score": "Credit score (300-900).",
+  "foir_ratio": "Fixed Obligation to Income Ratio (0.20-0.65).",
+  "employment_years": "Total years of employment (0-35).",
+  "loan_amount": "Requested loan amount in INR (2L-75L).",
+  "loan_to_value": "Loan-to-value ratio (0.40-0.90).",
+  "pin_code": "Applicant PIN code (20 diverse Indian codes).",
+  "social_category": "Protected attribute: General/OBC/SC/ST.",
+  "religion": "Protected attribute: Hindu/Muslim/Christian/Sikh/Other.",
+  "gender": "Protected attribute: Male/Female/Non-binary.",
+  "age": "Applicant age in years (21-75).",
+  "approval_probability": "Model probability after bias adjustments.",
+  "approved": "Decision label: 1=approved, 0=denied."
+}

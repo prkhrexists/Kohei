@@ -1,0 +1,178 @@
+name: 🚀 Deploy Kōhei to Firebase
+
+on:
+  push:
+    branches:
+      - main          # Auto-deploy on merge to main
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+    inputs:
+      target:
+        description: "Deploy target"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - hosting-only
+          - functions-only
+
+concurrency:
+  group: firebase-deploy-${{ github.ref }}
+  cancel-in-progress: true  # Cancel stale runs when new commits push
+
+env:
+  NODE_VERSION: "18"
+  PYTHON_VERSION: "3.11"
+
+# ──────────────────────────────────────────────────────────────────────────────
+jobs:
+  # ── 1. Lint & type-check ───────────────────────────────────────────────────
+  lint:
+    name: 🔍 Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: TypeScript type check
+        working-directory: frontend
+        run: npx tsc --noEmit
+
+  # ── 2. Build frontend ──────────────────────────────────────────────────────
+  build:
+    name: 🔨 Build Frontend
+    runs-on: ubuntu-latest
+    needs: lint
+    if: ${{ github.event.inputs.target != 'functions-only' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend (Vite)
+        working-directory: frontend
+        env:
+          VITE_FIREBASE_API_KEY:              ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN:          ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID:           ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET:       ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID:  ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID:               ${{ secrets.VITE_FIREBASE_APP_ID }}
+          VITE_FIREBASE_MEASUREMENT_ID:       ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 1
+
+  # ── 3. Deploy ──────────────────────────────────────────────────────────────
+  deploy:
+    name: ☁️ Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: [lint, build]
+    if: always() && needs.lint.result == 'success'
+    environment:
+      name: production
+      url: https://${{ secrets.VITE_FIREBASE_PROJECT_ID }}.web.app
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install functions npm deps
+        working-directory: functions
+        run: npm ci
+
+      - name: Install Python deps
+        run: pip install -r functions/requirements.txt
+
+      # Download the pre-built frontend (if available)
+      - name: Download frontend build artifact
+        if: needs.build.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+
+      # Set the Gemini API key as a Firebase functions config variable
+      - name: Set Firebase functions config
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase functions:config:set \
+            gemini.key="${{ secrets.GEMINI_API_KEY }}" \
+            --project "${{ secrets.VITE_FIREBASE_PROJECT_ID }}" \
+            --token "$FIREBASE_TOKEN"
+
+      # Determine deploy targets based on input or default
+      - name: Determine deploy targets
+        id: targets
+        run: |
+          INPUT="${{ github.event.inputs.target }}"
+          if [ "$INPUT" = "hosting-only" ]; then
+            echo "targets=hosting,firestore,storage" >> "$GITHUB_OUTPUT"
+          elif [ "$INPUT" = "functions-only" ]; then
+            echo "targets=functions" >> "$GITHUB_OUTPUT"
+          else
+            echo "targets=hosting,firestore,storage,functions" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase deploy \
+            --only "${{ steps.targets.outputs.targets }}" \
+            --project "${{ secrets.VITE_FIREBASE_PROJECT_ID }}" \
+            --token "$FIREBASE_TOKEN" \
+            --non-interactive
+
+      - name: 🎉 Deployment summary
+        run: |
+          echo "### ✅ Kōhei deployed successfully!" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Targets** | \`${{ steps.targets.outputs.targets }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Project** | \`${{ secrets.VITE_FIREBASE_PROJECT_ID }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Commit** | \`${{ github.sha }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| **Live URL** | https://${{ secrets.VITE_FIREBASE_PROJECT_ID }}.web.app |" >> "$GITHUB_STEP_SUMMARY"

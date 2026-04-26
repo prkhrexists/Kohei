@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper: authenticated user only.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: the user's bankId must match the document bankId.
+    function isBankMember(bankId) {
+      return isSignedIn() && request.auth.uid == bankId;
+    }
+
+    // Helper: role checks from custom auth claims.
+    function isComplianceOfficer() {
+      return isSignedIn() && request.auth.token.role == "compliance";
+    }
+
+    function isExecutive() {
+      return isSignedIn() && request.auth.token.role == "executive";
+    }
+
+    // Helper: enforce required metadata on all writes.
+    function hasWriteMetadata() {
+      return request.resource.data.keys().hasAll(["updatedAt", "updatedBy"])
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.updatedBy == request.auth.uid;
+    }
+
+    // Generic bank data: only members can read/write their own bankId.
+    match /banks/{bankId}/{document=**} {
+      // Bank members can read their own data.
+      allow read: if isBankMember(bankId);
+
+      // Bank members can write only with required metadata.
+      allow create, update, delete: if isBankMember(bankId) && hasWriteMetadata();
+    }
+
+    // Findings are shared with compliance and executives.
+    match /banks/{bankId}/findings/{findingId} {
+      // Compliance officers can read/write findings for their bank.
+      allow read, write: if isBankMember(bankId) && isComplianceOfficer() && hasWriteMetadata();
+
+      // Executives can read findings for their bank.
+      allow read: if isBankMember(bankId) && isExecutive();
+    }
+
+    // Reports are shared with compliance and executives.
+    match /banks/{bankId}/reports/{reportId} {
+      // Compliance officers can read/write reports for their bank.
+      allow read, write: if isBankMember(bankId) && isComplianceOfficer() && hasWriteMetadata();
+
+      // Executives can read reports for their bank.
+      allow read: if isBankMember(bankId) && isExecutive();
+    }
+  }
+}

@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper: authenticated user only.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper: allowed MIME types for CSV, Excel, JSON.
+    function isAllowedType() {
+      return request.resource.contentType in [
+        "text/csv",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/json"
+      ];
+    }
+
+    // Helper: enforce 100MB max upload size.
+    function isWithinSizeLimit() {
+      return request.resource.size < 100 * 1024 * 1024;
+    }
+
+    // Bank-scoped storage isolation.
+    match /banks/{bankId}/{allPaths=**} {
+      // Only authenticated users from the same bank can read.
+      allow read: if isSignedIn() && request.auth.uid == bankId;
+
+      // Only authenticated users from the same bank can write valid data.
+      allow create, update: if isSignedIn()
+        && request.auth.uid == bankId
+        && isAllowedType()
+        && isWithinSizeLimit();
+
+      // Allow deletes only for authenticated users in the same bank.
+      allow delete: if isSignedIn() && request.auth.uid == bankId;
+    }
+  }
+}

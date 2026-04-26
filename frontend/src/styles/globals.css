@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #1a1714;
+  --foreground: #f0ebe2;
+  --primary: #c0622a;
+  --primary-foreground: #f0ebe2;
+  --muted: #a09888;
+  --muted-foreground: #c7beaf;
+  --card: #2a2520;
+  --card-foreground: #f0ebe2;
+  --border: #3a322b;
+  --input: #3a322b;
+  --ring: #c0622a;
+  --success: #4caf7a;
+  --warning: #e8a02a;
+  --danger: #d45a4a;
+  --shadow: #0d0a08;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "IBM Plex Sans", "Space Grotesk", system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+.kohei-gradient {
+  background: radial-gradient(circle at top, rgba(192, 98, 42, 0.18), transparent 55%),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent 45%),
+    radial-gradient(circle at bottom right, rgba(76, 175, 122, 0.15), transparent 50%);
+}
