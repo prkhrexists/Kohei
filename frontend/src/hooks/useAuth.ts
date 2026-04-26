@@ -87,9 +87,10 @@ export function useAuth(): AuthHookState {
   const handleSignOut = useCallback(async () => {
     setLoading(true);
     setError(null);
+    const wasDemo = isDemoMode();
     deactivateDemoMode();
     try {
-      if (!isDemoMode()) await signOut();
+      if (!wasDemo) await signOut();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign out failed");
     } finally {

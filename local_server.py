@@ -78,6 +78,17 @@ def compute_air(df: pd.DataFrame, protected_col: str, decision_col: str):
 
         severity = "HIGH" if air < 0.8 else "MEDIUM" if air < 0.9 else "LOW"
 
+        # Feature importance: variance of each financial col within minority group
+        top_features = []
+        if financial_cols:
+            minority_df = df[df[protected_col] == group][financial_cols].apply(pd.to_numeric, errors="coerce").fillna(0)
+            variances = minority_df.var().sort_values(ascending=False)
+            total_var = variances.sum() or 1
+            top_features = [
+                {"name": col, "importance": round(float(var / total_var), 3)}
+                for col, var in variances.head(5).items()
+            ]
+
         findings.append({
             "id": f"finding_{protected_col}_{group}".replace(" ", "_").lower(),
             "attribute": f"{protected_col}: {group}",
@@ -85,7 +96,7 @@ def compute_air(df: pd.DataFrame, protected_col: str, decision_col: str):
             "airScore": round(air, 3),
             "twinDivergenceRate": round(twin_divergence, 1),
             "affectedCount": n_group,
-            "topFeatures": [],
+            "topFeatures": top_features,
             "status": "pending",
             "explanation": {
                 "headline": f"{group} applicants show {'significant' if air < 0.8 else 'moderate'} approval disparity",
@@ -196,7 +207,8 @@ def analyze():
         approval_rate = float(df[decision_col].mean())
         air_scores = [f["airScore"] for f in all_findings]
         min_air = min(air_scores) if air_scores else 1.0
-        compliance_score = int(min(100, max(0, min_air * 100 + 10)))
+        # Scale: AIR 1.0 → 100, AIR 0.8 → 80, AIR 0.0 → 0 (clamped 0-100)
+        compliance_score = int(max(0, min(100, min_air * 100)))
 
         overall_metrics = {
             "total_applicants": len(df),
