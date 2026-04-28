@@ -57,7 +57,7 @@ export function ComplianceMatrix({ rows, columns, data, onSelect }: ComplianceMa
         </div>
         <div className="overflow-auto rounded-2xl border border-[var(--border)]">
           <div className="min-w-[640px]">
-            <div className="grid grid-cols-[180px_repeat(auto-fit,minmax(140px,1fr))] bg-[#221f1b] text-xs uppercase tracking-[0.2em] text-[var(--muted)]">
+            <div className="grid grid-cols-[180px_repeat(auto-fit,minmax(140px,1fr))] bg-[var(--card)] text-xs uppercase tracking-[0.2em] text-[var(--muted)]">
               <div className="px-4 py-3">Protected attribute</div>
               {columns.map((col) => (
                 <div key={col} className="px-4 py-3 text-center">{col}</div>
@@ -77,7 +77,7 @@ export function ComplianceMatrix({ rows, columns, data, onSelect }: ComplianceMa
                       onClick={() => cell && onSelect?.(cell)}
                       className={cn(
                         "flex items-center justify-center px-4 py-3 text-sm text-white transition",
-                        cell ? scoreColor(cell.airScore) : "bg-[#2f2923]"
+                        cell ? scoreColor(cell.airScore) : "bg-[#e9eff5]"
                       )}
                     >
                       {cell ? cell.airScore.toFixed(2) : "--"}

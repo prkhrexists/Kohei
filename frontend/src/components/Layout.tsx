@@ -16,10 +16,10 @@ export function Layout() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <div className="flex">
+    <div className="min-h-screen overflow-x-hidden bg-[var(--background)] text-[var(--foreground)]">
+      <div className="flex min-w-0">
         <Sidebar />
-        <div className="flex min-h-screen flex-1 flex-col">
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
           <TopBar />
           <main className="relative flex-1 px-6 pb-10 pt-6 md:px-10">
             {routeLoading ? (

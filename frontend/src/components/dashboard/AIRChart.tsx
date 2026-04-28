@@ -88,7 +88,7 @@ export function AIRChart({ data, title = "Adverse Impact Ratio" }: AIRChartProps
               x: {
                 min: 0,
                 max: 1,
-                grid: { color: "#2f2923" },
+                grid: { color: "#e3e7ef" },
                 ticks: { color: "#a09888" },
                 title: { display: true, text: "AIR Score", color: "#a09888" }
               },

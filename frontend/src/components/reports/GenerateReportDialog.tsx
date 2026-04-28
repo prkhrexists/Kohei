@@ -92,7 +92,7 @@ export function GenerateReportDialog({
             <select
               value={type}
               onChange={(event) => setType(event.target.value as ReportConfig["type"])}
-              className="w-full rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)]"
             >
               <option>Bias Research Report</option>
               <option>Fix Strategy</option>
@@ -121,7 +121,7 @@ export function GenerateReportDialog({
             <input
               value={signature}
               onChange={(event) => setSignature(event.target.value)}
-              className="w-full rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)]"
               placeholder="Type full name"
             />
           </div>

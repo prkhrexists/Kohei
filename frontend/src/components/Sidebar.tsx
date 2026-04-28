@@ -38,7 +38,7 @@ export function Sidebar() {
                 "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition",
                 isActive
                   ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                  : "text-[var(--muted)] hover:bg-[#2f2923] hover:text-[var(--foreground)]"
+                  : "text-[var(--muted)] hover:bg-[#e9eff5] hover:text-[var(--foreground)]"
               )
             }
           >
@@ -47,9 +47,9 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
-      <div className="rounded-2xl border border-[var(--border)] bg-[#221f1b] p-4">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2f2923]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e9eff5]">
             <UserCircle className="h-6 w-6 text-[var(--muted)]" aria-hidden="true" />
           </div>
           <div>

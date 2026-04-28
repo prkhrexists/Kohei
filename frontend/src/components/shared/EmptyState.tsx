@@ -25,7 +25,7 @@ export function EmptyState({
       role="status"
       aria-live="polite"
     >
-      <div className="mb-4 h-16 w-16 rounded-full border border-[var(--border)] bg-[#221f1b]" />
+      <div className="mb-4 h-16 w-16 rounded-full border border-[var(--border)] bg-[var(--card)]" />
       <h3 className="text-lg font-semibold text-[var(--foreground)]">{title}</h3>
       <p className="mt-2 text-sm text-[var(--muted)]">{description}</p>
       {actionLabel && onAction && (

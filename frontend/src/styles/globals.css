@@ -5,21 +5,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #1a1714;
-  --foreground: #f0ebe2;
-  --primary: #c0622a;
-  --primary-foreground: #f0ebe2;
-  --muted: #a09888;
-  --muted-foreground: #c7beaf;
-  --card: #2a2520;
-  --card-foreground: #f0ebe2;
-  --border: #3a322b;
-  --input: #3a322b;
-  --ring: #c0622a;
-  --success: #4caf7a;
-  --warning: #e8a02a;
-  --danger: #d45a4a;
-  --shadow: #0d0a08;
+  --background: #ffffff;
+  --foreground: #0b0f1a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --muted: #4b5563;
+  --muted-foreground: #6b7280;
+  --card: #ffffff;
+  --card-foreground: #0b0f1a;
+  --border: #e5e7eb;
+  --input: #ffffff;
+  --ring: #2563eb;
+  --success: #2563eb;
+  --warning: #64748b;
+  --danger: #0b0f1a;
+  --shadow: transparent;
 }
 
 * {
@@ -30,6 +30,15 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: "IBM Plex Sans", "Space Grotesk", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
 a {
@@ -37,7 +46,16 @@ a {
 }
 
 .kohei-gradient {
-  background: radial-gradient(circle at top, rgba(192, 98, 42, 0.18), transparent 55%),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06), transparent 45%),
-    radial-gradient(circle at bottom right, rgba(76, 175, 122, 0.15), transparent 50%);
+  background:
+    radial-gradient(circle at top, rgba(37, 99, 235, 0.08), transparent 55%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(229, 231, 235, 0.6),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 255, 255, 0.95),
+      transparent 50%
+    );
 }

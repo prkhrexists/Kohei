@@ -10,7 +10,7 @@ export function ProgressTracker({ current, total, estimatedMinutes }: ProgressTr
   const progress = total === 0 ? 0 : Math.round((current / total) * 100);
 
   return (
-    <div className="space-y-2 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-kohei">
+    <div className="space-y-2 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-none">
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <p className="text-[var(--muted)]">Reviewing finding {current} of {total}</p>
         {estimatedMinutes && (

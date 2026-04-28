@@ -82,7 +82,7 @@ export function DashboardPage() {
         breadcrumbs={[{ label: "Kohei" }, { label: "Dashboard" }]}
         actions={
           <button
-            className="rounded-xl border border-[var(--border)] bg-[#221f1b] px-4 py-2 text-sm text-[var(--muted)]"
+            className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-2 text-sm text-[var(--muted)]"
             type="button"
           >
             Last 30 days

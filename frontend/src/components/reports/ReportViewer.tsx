@@ -68,7 +68,7 @@ export function ReportViewer({ url }: ReportViewerProps) {
     <Card>
       <CardContent className="space-y-4 py-6">
         {controls}
-        <div className="flex justify-center rounded-2xl border border-[var(--border)] bg-[#221f1b] p-4">
+        <div className="flex justify-center rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
           <Document file={url} onLoadSuccess={handleDocumentLoad} loading="Loading PDF...">
             <Page pageNumber={page} scale={scale} />
           </Document>

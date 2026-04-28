@@ -8,9 +8,9 @@ type FindingSidebarProps = {
 };
 
 const severityDot = {
-  HIGH: "bg-[var(--danger)]",
-  MEDIUM: "bg-[var(--warning)]",
-  LOW: "bg-[var(--success)]"
+  HIGH: "bg-[var(--foreground)]",
+  MEDIUM: "bg-[var(--muted)]",
+  LOW: "bg-[#9ca3af]"
 } as const;
 
 const statusIcon = {
@@ -32,8 +32,8 @@ export function FindingSidebar({ findings, activeId, onSelect }: FindingSidebarP
             className={cn(
               "flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left text-sm transition",
               activeId === finding.id
-                ? "border-[var(--primary)] bg-[#2f2923]"
-                : "border-transparent hover:bg-[#2f2923]"
+                ? "border-[var(--primary)] bg-[#f3f4f6]"
+                : "border-transparent hover:bg-[#f3f4f6]"
             )}
             aria-label={`Finding ${index + 1} ${finding.attribute}`}
           >

@@ -38,7 +38,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
         {
           label: "Importance",
           data: topFeatures.map((feature) => feature.importance),
-          backgroundColor: "rgba(192, 98, 42, 0.8)",
+          backgroundColor: "rgba(37, 99, 235, 0.85)",
           borderRadius: 8
         }
       ]
@@ -53,7 +53,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
     <Card
       ref={cardRef}
       tabIndex={-1}
-      className="relative w-full max-w-3xl border-[var(--border)] bg-[var(--card)]/95 shadow-kohei transition-all"
+      className="relative w-full max-w-3xl border border-[var(--border)] bg-[var(--card)] transition-all"
     >
       <CardContent className="space-y-6 p-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
@@ -64,12 +64,12 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
             </h2>
             <p className="text-sm text-[var(--muted)]">~{finding.affectedCount} applicants impacted</p>
           </div>
-          <span className="rounded-full border border-[var(--border)] bg-[#221f1b] px-3 py-1 text-xs uppercase text-[var(--muted)]">
+          <span className="rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-1 text-xs uppercase text-[var(--muted)]">
             Status: {finding.status}
           </span>
         </header>
 
-        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[#221f1b] p-5 sm:grid-cols-3">
+        <section className="grid gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-3">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--muted)]">AIR Score</p>
             <p className={cn("mt-2 text-3xl font-semibold", airTone(finding.airScore))}>
@@ -99,7 +99,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
             {showExplanation ? "Hide" : "Show"} Gemini explanation
           </button>
           {showExplanation && finding.explanation && (
-            <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[#221f1b] p-4 text-sm">
+            <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 text-sm">
               <p className="font-semibold text-[var(--foreground)]">{finding.explanation.headline}</p>
               <p className="text-[var(--muted)]">{finding.explanation.what_it_means}</p>
               <p className="text-[var(--muted)]">
@@ -122,7 +122,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
           <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
             Feature importance
           </h3>
-          <div className="rounded-2xl border border-[var(--border)] bg-[#221f1b] p-4">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
             <Bar
               data={chartData}
               options={{
@@ -131,8 +131,8 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
                   legend: { display: false }
                 },
                 scales: {
-                  x: { ticks: { color: "#a09888" }, grid: { color: "#2f2923" } },
-                  y: { ticks: { color: "#f0ebe2" }, grid: { display: false } }
+                  x: { ticks: { color: "#6b7280" }, grid: { color: "#e3e7ef" } },
+                  y: { ticks: { color: "#6b7280" }, grid: { display: false } }
                 }
               }}
             />
@@ -142,7 +142,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
         <Separator />
 
         <section className="flex flex-wrap gap-3">
-          <Button onClick={() => onAction("confirmed", note)} className="bg-[var(--success)] text-white">
+          <Button onClick={() => onAction("confirmed", note)}>
             ✓ Confirm Finding
           </Button>
           <Button variant="secondary" onClick={() => onAction("dismissed", note)}>
@@ -161,7 +161,7 @@ export function FindingCard({ finding, onAction, onNext, onPrevious }: FindingCa
             value={note}
             onChange={(event) => setNote(event.target.value)}
             rows={3}
-            className="w-full rounded-2xl border border-[var(--border)] bg-[#221f1b] p-3 text-sm text-[var(--foreground)]"
+            className="w-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 text-sm text-[var(--foreground)]"
             placeholder="Add a note for this finding"
           />
         )}

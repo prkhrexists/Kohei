@@ -62,13 +62,13 @@ export function ReportsPage() {
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)] md:max-w-xs"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)] md:max-w-xs"
               placeholder="Search by analysis name"
             />
             <select
               value={typeFilter}
               onChange={(event) => setTypeFilter(event.target.value)}
-              className="rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)]"
             >
               <option value="all">All Types</option>
               <option value="Bias Research">Bias Research</option>
@@ -77,7 +77,7 @@ export function ReportsPage() {
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
-              className="rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)]"
+              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)]"
             >
               <option value="all">All Status</option>
               <option value="ready">Ready</option>

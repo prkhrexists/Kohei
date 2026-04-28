@@ -35,7 +35,7 @@ export function BiasScorecard({ cards }: BiasScorecardProps) {
 
   const trend = overall >= 85 ? "improving" : overall >= 70 ? "stable" : "worsening";
   const trendIcon = trend === "improving" ? "↑" : trend === "stable" ? "→" : "↓";
-  const gradient = `conic-gradient(#4caf7a ${overall * 3.6}deg, #2f2923 0deg)`;
+  const gradient = `conic-gradient(#1b873f ${overall * 3.6}deg, #e9eff5 0deg)`;
 
   return (
     <div className="space-y-6">

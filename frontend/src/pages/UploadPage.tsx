@@ -22,10 +22,10 @@ const typeLabels: Record<ColumnType, string> = {
 };
 
 const typeColors: Record<ColumnType, string> = {
-  FINANCIAL: "bg-blue-600 text-white",
-  DEMOGRAPHIC: "bg-[var(--warning)] text-[#2b1a07]",
-  DECISION: "bg-[var(--success)] text-white",
-  UNKNOWN: "bg-[#2f2923] text-[var(--muted)]"
+  FINANCIAL: "bg-[var(--primary)] text-[var(--primary-foreground)]",
+  DEMOGRAPHIC: "border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)]",
+  DECISION: "bg-[var(--foreground)] text-[var(--background)]",
+  UNKNOWN: "border border-[var(--border)] bg-[#f3f4f6] text-[var(--muted)]"
 };
 
 export function UploadPage() {
@@ -136,8 +136,8 @@ export function UploadPage() {
           <div
             {...getRootProps()}
             className={cn(
-              "flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--border)] bg-[#221f1b] px-6 py-12 text-center transition",
-              isDragActive ? "border-[var(--primary)] bg-[#2c241d]" : ""
+              "flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--card)] px-6 py-12 text-center transition",
+              isDragActive ? "border-[var(--primary)] bg-[#eff6ff]" : ""
             )}
           >
             <input {...getInputProps()} />
@@ -254,7 +254,7 @@ export function UploadPage() {
                     <select
                       value={col.type}
                       onChange={(event) => updateColumnType(col.name, event.target.value as ColumnType)}
-                      className="rounded-xl border border-[var(--border)] bg-[#221f1b] px-3 py-2 text-sm text-[var(--foreground)]"
+                      className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm text-[var(--foreground)]"
                       aria-label={`Select type for ${col.name}`}
                     >
                       {Object.keys(typeLabels).map((type) => (

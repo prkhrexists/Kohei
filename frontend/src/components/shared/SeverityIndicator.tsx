@@ -8,9 +8,9 @@ type SeverityIndicatorProps = {
 };
 
 const levelStyles = {
-  HIGH: "bg-[var(--danger)] text-white",
-  MEDIUM: "bg-[var(--warning)] text-[#2b1a07]",
-  LOW: "bg-[var(--success)] text-white"
+  HIGH: "bg-[var(--foreground)] text-[var(--background)]",
+  MEDIUM: "border border-[var(--border)] text-[var(--foreground)]",
+  LOW: "border border-[var(--border)] text-[var(--muted)]"
 } as const;
 
 export function SeverityIndicator({ level, className }: SeverityIndicatorProps) {
